@@ -3,6 +3,7 @@ import pygame
 import assets
 import configs
 from objects.background import Background
+from objects.bird import Bird
 from objects.column import Column
 from objects.floor import Floor
 
@@ -12,6 +13,7 @@ screen = pygame.display.set_mode((configs.SCREEN_WIDTH, configs.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 column_create_event = pygame.USEREVENT
 running = True
+gameover = False
 
 assets.load_sprites()
 
@@ -22,6 +24,8 @@ Background(1, sprites)
 Floor(0, sprites)
 Floor(1, sprites)
 
+bird = Bird(sprites)
+
 pygame.time.set_timer(column_create_event, 1500)
 
 while running:
@@ -30,10 +34,18 @@ while running:
             running = False
         if event.type == column_create_event:
             Column(sprites)
-    screen.fill("pink")
+
+        bird.handle_event(event)
+
+    screen.fill(0)
 
     sprites.draw(screen)
-    sprites.update()
+
+    if not gameover:
+        sprites.update()
+
+    if bird.check_collision(sprites):
+        gameover = True
 
     pygame.display.flip()
     clock.tick(configs.FPS)

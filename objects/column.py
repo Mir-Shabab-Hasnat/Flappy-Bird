@@ -33,6 +33,8 @@ class Column(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(midleft=(configs.SCREEN_WIDTH, random.uniform(min_y, max_y)))
 
+        self.mask = pygame.mask.from_surface(self.image)
+
         super().__init__(*groups)
 
     def update(self):
